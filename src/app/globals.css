@@ -1,0 +1,210 @@
+@import "tailwindcss";
+
+/* ============================================================================
+   YanYana — Warm minimalism + editorial wedding + modern SaaS.
+   Cream base, white surfaces, deep-brown ink, one terracotta accent.
+   Sage / powder-blue used only as sparse feature-card tints (<25% of area).
+   Border-first surfaces, near-zero shadow, generous whitespace.
+   Headings + body: Manrope. A very sparing DM Serif Display accent.
+   Tokens are Tailwind v4 CSS-first (@theme).
+   ========================================================================== */
+@theme {
+  /* ---- Fonts (wired to next/font variables in layout.tsx) ---- */
+  --font-sans: var(--font-manrope), "Manrope", "Segoe UI", system-ui, sans-serif;
+  --font-display: var(--font-fraunces), "Fraunces", Georgia, "Times New Roman", serif;
+
+  /* ---- Base ---- */
+  --color-background: #fbf7f1; /* warm cream — the dominant surface */
+  --color-background-soft: #f5eee5; /* soft cream band */
+  --color-surface: #ffffff;
+  --color-surface-warm: #f1e5d8;
+
+  /* ---- Foreground ---- */
+  --color-text-primary: #2d211c; /* deep brown ink */
+  --color-text-secondary: #746860;
+  --color-text-muted: #a89c94;
+
+  /* ---- Primary = terracotta ---- */
+  --color-primary: #b85f3b;
+  --color-primary-hover: #a64f30;
+  --color-primary-soft: #ebc8b6;
+
+  /* ---- Deep browns ---- */
+  --color-brown: #4a3025;
+  --color-brown-dark: #291c17;
+
+  /* ---- Sparse support tints ---- */
+  --color-sage: #ccd5c2;
+  --color-powder-blue: #dce8e8;
+
+  /* ---- Borders ---- */
+  --color-border: #e5ddd4;
+  --color-border-strong: #d7ccc1;
+
+  /* ---- Seating-planner UI palette ---- */
+  --color-canvas: #f8f5f0;
+  --color-seat-occupied: #b85f3b;
+  --color-seat-available: #e8e0d8;
+  --color-seat-selected: #4a3025;
+  --color-ui-success: #78916d;
+  --color-ui-warning: #c6914a;
+
+  /* ---- Radii ---- */
+  --radius-small: 10px;
+  --radius-button: 12px;
+  --radius-card: 20px;
+  --radius-large: 28px;
+  --radius-image: 24px;
+  --radius-pill: 999px;
+
+  /* ---- Shadows (border-first; shadows stay whisper-light) ---- */
+  --shadow-soft: 0 1px 2px rgba(45, 33, 28, 0.03), 0 10px 30px rgba(45, 33, 28, 0.05);
+  --shadow-float: 0 16px 50px rgba(45, 33, 28, 0.1);
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-primary-soft);
+  color: var(--color-brown-dark);
+}
+
+/* ---------------------------------------------------------------------------
+   Typography helpers
+   ------------------------------------------------------------------------- */
+.text-hero {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  font-optical-sizing: auto;
+}
+
+.text-heading {
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.018em;
+  line-height: 1.08;
+  font-optical-sizing: auto;
+}
+
+/* Warm italic accent — same display family, used very sparingly. */
+.text-serif {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.text-eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 12.5px;
+}
+
+/* Wedibox-style feature surface — near-borderless, whisper shadow, big radius.
+   Background is set per-card so tints can override. */
+.card-soft {
+  border: 1px solid color-mix(in srgb, var(--color-border) 55%, transparent);
+  border-radius: var(--radius-large);
+  box-shadow: 0 1px 2px rgba(45, 33, 28, 0.03), 0 18px 40px rgba(45, 33, 28, 0.06);
+}
+
+/* Frosted control over hero photography. */
+.glass {
+  background: color-mix(in srgb, #ffffff 16%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid color-mix(in srgb, #ffffff 34%, transparent);
+}
+
+/* ---------------------------------------------------------------------------
+   Reveal-on-scroll (progressive enhancement; visible if JS is off)
+   ------------------------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Animated hero vs. static poster, driven by motion preference. */
+.reduced-only {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .motion-only {
+    display: none;
+  }
+  .reduced-only {
+    display: block;
+  }
+}
+
+/* Decorative sparkle twinkle (very subtle) */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+}
+.sparkle {
+  animation: twinkle 3.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sparkle {
+    animation: none;
+  }
+}
+
+/* Thin custom scrollbar for the in-mockup guest lists */
+.thin-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 999px;
+}
+.thin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
